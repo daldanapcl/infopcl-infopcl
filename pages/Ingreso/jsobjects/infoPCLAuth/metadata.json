@@ -1,0 +1,28 @@
+{
+  "gitSyncId": "69d3a680df758d40c23d95b3_d436e4bc-5938-4602-b4db-aeabcd4e1106",
+  "id": "Ingreso_infoPCLAuth",
+  "unpublishedCollection": {
+    "name": "infoPCLAuth",
+    "pageId": "Ingreso",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "VARS",
+        "value": "{\n  SESION_ID: \"sesion_id\",\n  USUARIO_ID: \"usuario_id\",\n  NOMBRE_USUARIO: \"nombre_usuario\",\n  CORREO_ELECTRONICO: \"correo_electronico\",\n  ROLES: \"roles\",\n  USUARIO_AUTENTICADO: \"usuario_autenticado\",\n  PAGINA_AUTORIZADA: \"pagina_autorizada\"\n}"
+      },
+      {
+        "name": "urlIngreso",
+        "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/ingreso\""
+      },
+      {
+        "name": "urlMenu",
+        "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/menu\""
+      },
+      {
+        "name": "urlNoAutorizado",
+        "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/no-autorizado\""
+      }
+    ]
+  }
+}

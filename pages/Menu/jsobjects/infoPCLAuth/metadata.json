@@ -1,0 +1,24 @@
+{
+  "gitSyncId": "69d3a680df758d40c23d95b3_36c6d33b-94ce-4f52-8bce-4ff7ec235a08",
+  "id": "Menu_infoPCLAuth",
+  "unpublishedCollection": {
+    "name": "infoPCLAuth",
+    "pageId": "Menu",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "urlIngreso",
+        "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/ingreso\""
+      },
+      {
+        "name": "urlMenu",
+        "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/menu\""
+      },
+      {
+        "name": "urlNoAutorizado",
+        "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/no-autorizado\""
+      }
+    ]
+  }
+}
