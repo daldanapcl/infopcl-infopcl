@@ -3,14 +3,24 @@ export default {
 	// AUTENTICACION CENTRAL - infoPCL
 	// =====================================================
 	/**
-     * Convenciones:
+     * Convenciones del modulo:
      * - Metodos SIN "_" => API publica
-     * - Metodos CON "_" => uso interno
+     * - Metodos CON "_" => uso interno del framework
+     *
+     * Objetivos del modulo:
+     * - Centralizar autenticacion y validacion de sesion
+     * - Controlar acceso por roles
+     * - Evitar inconsistencias visuales en paginas protegidas
+     * - Proveer una API reutilizable para todas las apps de infoPCL
      */
 
 	// =====================================================
 	// CONSTANTES DE STORE
 	// =====================================================
+	/**
+     * Claves centralizadas del appsmith.store.
+     * Usar estas constantes evita typos y facilita mantenimiento.
+     */
 	VARS: {
 		SESION_ID: "sesion_id",
 		USUARIO_ID: "usuario_id",
@@ -22,8 +32,12 @@ export default {
 	},
 
 	// =====================================================
-	// URLS BASE
+	// URLS BASE DEL SISTEMA
 	// =====================================================
+	/**
+     * URLs principales del sistema.
+     * Se construyen dinamicamente con el hostname actual.
+     */
 	urlIngreso: "http://" + appsmith.URL.hostname + "/app/infopcl/ingreso",
 	urlMenu: "http://" + appsmith.URL.hostname + "/app/infopcl/menu",
 	urlNoAutorizado: "http://" + appsmith.URL.hostname + "/app/infopcl/no-autorizado",
@@ -32,8 +46,16 @@ export default {
 	// CONFIGURACION CENTRALIZADA DE PAGINAS
 	// =====================================================
 	/**
-     * Agrega aqui todas las paginas protegidas del sistema.
-     * Cada clave representa una pagina logica.
+     * Devuelve el mapa centralizado de paginas del sistema.
+     *
+     * Cada entrada puede definir:
+     * - url: direccion de la pagina
+     * - roles: array de roles requeridos o null si no requiere roles
+     * - mensajeSinPermiso: mensaje personalizado al denegar acceso
+     *
+     * Recomendacion:
+     * - Agregar aqui cada pagina protegida para evitar repetir logica
+     *   en los eventos onLoad.
      */
 	_obtenerPaginas() {
 		return {
@@ -49,30 +71,35 @@ export default {
 				url: this.urlNoAutorizado,
 				roles: null
 			},
-
-			// Ejemplo de pagina protegida por roles
 			ADMIN_PRODUCTOS: {
 				url: "http://" + appsmith.URL.hostname + "/app/infopcl/admin-productos",
 				roles: ["ADMINISTRADOR", "PRODUCT_MANAGER"],
 				mensajeSinPermiso: "No tienes permisos para acceder a esta pagina."
 			}
-
-			// Agregar mas paginas aqui
-			// EJEMPLO:
-			// USUARIOS: {
-			//     url: "http://" + appsmith.URL.hostname + "/app/infopcl/usuarios",
-			//     roles: ["ADMINISTRADOR"]
-			// }
 		};
 	},
 
 	// =====================================================
 	// MODO EDIT - CONTROL GLOBAL
 	// =====================================================
+	/**
+     * Indica si AppSmith esta en modo edicion.
+     *
+     * Importancia:
+     * - En modo edicion NO se debe navegar automaticamente
+     * - Esto evita que AppSmith redirija al login mientras se edita
+     */
 	_estaEnModoEdicion() {
 		return appsmith.mode === "EDIT";
 	},
 
+	/**
+     * Ejecuta una funcion solo si la app NO esta en modo edicion.
+     *
+     * Uso:
+     * - Navegacion
+     * - Side effects que no deben dispararse al editar
+     */
 	_ejecutarSiProduccion(fn) {
 		if (this._estaEnModoEdicion()) {
 			return Promise.resolve();
@@ -80,6 +107,18 @@ export default {
 		return Promise.resolve(fn());
 	},
 
+	/**
+     * Navegacion controlada y segura.
+     *
+     * Comportamiento:
+     * - No navega en modo edicion
+     * - Puede mostrar un mensaje opcional antes de navegar
+     *
+     * Parametros:
+     * - pagina: URL destino
+     * - mensaje: texto opcional a mostrar
+     * - tipo: tipo de alert, por defecto "error"
+     */
 	_navegar(pagina, { mensaje = null, tipo = "error" } = {}) {
 		return this._ejecutarSiProduccion(() => {
 			if (mensaje) {
@@ -89,6 +128,14 @@ export default {
 		});
 	},
 
+	/**
+     * Navegacion sin alertas.
+     *
+     * Uso tipico:
+     * - Redireccion por sesion vacia
+     * - Redireccion al menu
+     * - Redireccion al login sin mostrar errores
+     */
 	_navegarSilencioso(pagina) {
 		return this._navegar(pagina);
 	},
@@ -96,16 +143,22 @@ export default {
 	// =====================================================
 	// MINI STATE HELPER
 	// =====================================================
-
 	/**
-     * Lee un valor del store usando una constante de VARS.
+     * Lee un valor del store.
+     *
+     * Parametros:
+     * - nombreVariable: clave del store
      */
 	_get(nombreVariable) {
 		return appsmith.store[nombreVariable];
 	},
 
 	/**
-     * Escribe un valor en el store usando una constante de VARS.
+     * Escribe un valor individual en el store.
+     *
+     * Parametros:
+     * - nombreVariable: clave del store
+     * - valor: valor a guardar
      */
 	_set(nombreVariable, valor) {
 		return storeValue(nombreVariable, valor);
@@ -113,7 +166,15 @@ export default {
 
 	/**
      * Escribe multiples valores en el store en paralelo.
-     * Recibe un objeto { clave: valor }.
+     *
+     * Parametros:
+     * - valores: objeto con formato { clave: valor }
+     *
+     * Ejemplo:
+     * this._setMuchos({
+     *   [this.VARS.SESION_ID]: "abc123",
+     *   [this.VARS.USUARIO_AUTENTICADO]: true
+     * })
      */
 	_setMuchos(valores) {
 		return Promise.all(
@@ -122,22 +183,39 @@ export default {
 	},
 
 	/**
-     * Limpia multiples valores en el store en paralelo.
-     * Recibe un array de claves.
+     * Limpia multiples valores del store asignando null.
+     *
+     * Parametros:
+     * - claves: array de claves a limpiar
+     *
+     * Nota:
+     * - Actualmente no se usa de forma intensiva porque _limpiarSesion
+     *   necesita algunos booleanos explicitos en false.
      */
 	_limpiarMuchos(claves) {
-		return Promise.all(claves.map((clave) => storeValue(clave, null)));
+		return Promise.all(
+			claves.map((clave) => storeValue(clave, null))
+		);
 	},
 
+	// =====================================================
+	// HELPERS PUBLICOS DE ESTADO UI
+	// =====================================================
 	/**
-     * Devuelve true solo si el usuario esta autenticado.
+     * Indica si hay un usuario autenticado.
+     *
+     * Uso recomendado:
+     * - Visible de widgets del header para usuario logueado
      */
 	estaAutenticado() {
 		return this._get(this.VARS.USUARIO_AUTENTICADO) === true;
 	},
 
 	/**
-     * Devuelve true solo si la pagina esta autorizada para renderizar.
+     * Indica si la pagina actual ya fue autorizada para renderizar contenido.
+     *
+     * Uso recomendado:
+     * - Visible del body principal en paginas protegidas
      */
 	estaPaginaAutorizada() {
 		return this._get(this.VARS.PAGINA_AUTORIZADA) === true;
@@ -146,10 +224,25 @@ export default {
 	// =====================================================
 	// GATE VISUAL (ANTI-FLICKER)
 	// =====================================================
+	/**
+     * Reinicia el estado de autorizacion visual de la pagina.
+     *
+     * Uso:
+     * - Debe ejecutarse antes de comenzar a validar acceso
+     *
+     * Efecto:
+     * - Oculta el contenido protegido hasta completar validacion
+     */
 	_reiniciarPaginaAutorizada() {
 		return this._set(this.VARS.PAGINA_AUTORIZADA, false);
 	},
 
+	/**
+     * Marca la pagina como autorizada para renderizar contenido.
+     *
+     * Uso:
+     * - Solo debe llamarse cuando la validacion fue exitosa
+     */
 	_marcarPaginaAutorizada() {
 		return this._set(this.VARS.PAGINA_AUTORIZADA, true);
 	},
@@ -157,6 +250,17 @@ export default {
 	// =====================================================
 	// BOOTSTRAP DE SESION (URL -> STORE)
 	// =====================================================
+	/**
+     * Inicializa la sesion leyendo sesion_id desde la URL.
+     *
+     * Uso:
+     * - Permite SSO interno o navegacion entre apps usando sesion_id
+     *
+     * Comportamiento:
+     * - Si la URL no trae sesion_id, no hace cambios
+     * - Si ya existe sesion_id en store, no sobrescribe
+     * - Si encuentra sesion_id y el store esta vacio, lo guarda
+     */
 	_inicializarSesionDesdeURL() {
 		const sesionURL = appsmith.URL?.queryParams?.sesion_id;
 
@@ -174,6 +278,17 @@ export default {
 	// =====================================================
 	// MANEJO DE SESION
 	// =====================================================
+	/**
+     * Guarda en el store la informacion de sesion devuelta por backend.
+     *
+     * Responsabilidades:
+     * - Guardar identificadores y datos del usuario
+     * - Normalizar roles a array
+     * - Marcar usuario como autenticado
+     *
+     * Retorna:
+     * - Promise que resuelve con el array normalizado de roles
+     */
 	_setSesionDesdeResponse(r0) {
 		const rolesArr = (r0.roles || "")
 		.split(",")
@@ -190,6 +305,18 @@ export default {
 		}).then(() => rolesArr);
 	},
 
+	/**
+     * Limpia completamente la sesion actual.
+     *
+     * Responsabilidades:
+     * - Eliminar datos del usuario
+     * - Eliminar roles
+     * - Marcar usuario como NO autenticado
+     * - Reiniciar bandera de pagina autorizada
+     *
+     * Importancia:
+     * - Evita datos fantasmas en header y navegacion
+     */
 	_limpiarSesion() {
 		return this._setMuchos({
 			[this.VARS.SESION_ID]: null,
@@ -205,6 +332,14 @@ export default {
 	// =====================================================
 	// VALIDACION DE SESION (BACKEND)
 	// =====================================================
+	/**
+     * Valida la sesion contra el backend y refresca el store si es valido.
+     *
+     * Retorna un objeto con estructura:
+     * - { ok: true, roles: [...] } si la sesion es valida
+     * - { ok: false, sesionVacia: true } si no hay sesion_id
+     * - { ok: false, sesionVacia: false, motivo: "..." } si hay error o sesion invalida
+     */
 	_validarYRefrescarSesion() {
 		const sesionId = this._get(this.VARS.SESION_ID);
 
@@ -240,8 +375,24 @@ export default {
 	},
 
 	// =====================================================
-	// GUARD BASE DE ACCESO
+	// API PRINCIPAL - GUARD DE ACCESO
 	// =====================================================
+	/**
+     * Protege una pagina de forma generica.
+     *
+     * Flujo:
+     * 1. Reinicia gate visual
+     * 2. Inicializa sesion desde URL si aplica
+     * 3. Valida sesion con backend
+     * 4. Valida roles si fueron requeridos
+     * 5. Autoriza render visual o redirige
+     *
+     * Parametros:
+     * - roles: rol o array de roles requeridos, o null si no aplica
+     * - redirigirA: URL a login si no hay sesion valida
+     * - paginaSinPermiso: URL destino cuando el usuario no tiene permisos
+     * - mensajeSinPermiso: mensaje a mostrar si no cumple roles
+     */
 	protegerAcceso(config = {}) {
 		const {
 			roles = null,
@@ -267,7 +418,7 @@ export default {
 			const rolesUsuario = res.roles || [];
 			const rolesRequeridos = Array.isArray(roles) ? roles : [roles];
 
-			const tieneAcceso = rolesRequeridos.some((rol) => 
+			const tieneAcceso = rolesRequeridos.some((rol) =>
 																							 rolesUsuario.includes(rol)
 																							);
 
@@ -284,11 +435,14 @@ export default {
 	// =====================================================
 	// ROUTING CENTRALIZADO POR PAGINA
 	// =====================================================
-
 	/**
      * Protege una pagina usando su configuracion centralizada.
-     * Ejemplo:
-     * infoPCLAuth.protegerPagina("ADMIN_PRODUCTOS")
+     *
+     * Uso recomendado en onLoad:
+     * {{ infoPCLAuth.protegerPagina("ADMIN_PRODUCTOS") }}
+     *
+     * Beneficio:
+     * - Evita repetir roles y configuracion en cada pagina
      */
 	protegerPagina(nombrePagina) {
 		const paginas = this._obtenerPaginas();
@@ -310,8 +464,14 @@ export default {
 
 	/**
      * Navega a una pagina configurada centralmente.
-     * Ejemplo:
-     * infoPCLAuth.irAPagina("MENU")
+     *
+     * Uso:
+     * - Navegacion por botones
+     * - Redireccion despues del login
+     *
+     * Parametros:
+     * - nombrePagina: clave definida en _obtenerPaginas()
+     * - mensaje: mensaje opcional previo a navegar
      */
 	irAPagina(nombrePagina, mensaje = null) {
 		const paginas = this._obtenerPaginas();
@@ -332,12 +492,27 @@ export default {
 	// =====================================================
 	// API PUBLICA - UTILIDADES
 	// =====================================================
+	/**
+     * Verifica si el usuario actual tiene un rol especifico.
+     *
+     * Uso recomendado:
+     * - Visible de botones del header
+     * - Visible de secciones especificas por rol
+     */
 	tieneRol(rol) {
 		const roles = this._get(this.VARS.ROLES);
 		if (!roles) return false;
 		return roles.includes(rol);
 	},
 
+	/**
+     * Cierra la sesion de forma controlada.
+     *
+     * Flujo:
+     * - Intenta cerrar sesion en backend
+     * - Limpia sesion local aunque el backend falle
+     * - Redirige a ingreso
+     */
 	cerrarSesion() {
 		return CerrarSesion.run({
 			p_sesion_id: this._get(this.VARS.SESION_ID)
@@ -349,6 +524,18 @@ export default {
 			.then(() => this._navegarSilencioso(this.urlIngreso));
 	},
 
+	/**
+     * Limpia la sesion local y redirige a la pagina de ingreso.
+     *
+     * Uso:
+     * - Sesion expirada
+     * - Sesion invalida
+     * - Logout forzado
+     * - Cualquier flujo donde deba limpiarse el estado antes de ir a login
+     *
+     * Parametros:
+     * - mensaje: mensaje opcional a mostrar antes de redirigir
+     */
 	irAIngresoLimpiandoSesion(mensaje = null) {
 		return this._limpiarSesion().then(() => {
 			if (mensaje) {
@@ -359,9 +546,40 @@ export default {
 	},
 
 	/**
-     * Procesa el resultado del query de autenticacion en la pagina de ingreso.
+     * Inicializa la pagina de ingreso de forma segura.
+     *
+     * Responsabilidades:
+     * - Limpia completamente el estado de sesion del usuario
+     * - Elimina datos residuales que puedan afectar el header o navegacion
+     * - Garantiza que el sistema arranque en estado "no autenticado"
+     * - Previene inconsistencias visuales y datos fantasmas en UI
+     *
+     * Uso:
+     * - Debe ejecutarse en el onLoad de la pagina de ingreso
+     *
+     * Nota:
+     * - Funciona como punto de entrada limpio al sistema
+     * - Reutiliza la logica centralizada de limpieza de sesion
+     */
+	reiniciarIngreso() {
+		return this._limpiarSesion();
+	},
+
+	/**
+     * Procesa el resultado del login.
+     *
+     * Flujo:
+     * - Verifica la respuesta del backend
+     * - Si es valida, inicializa la sesion en store
+     * - Redirige a una pagina definida en el routing centralizado
+     *
+     * Parametros:
+     * - data: arreglo devuelto por el query de autenticacion
+     * - paginaDestino: clave de pagina definida en _obtenerPaginas()
+     *
      * Uso recomendado:
-     * AutenticarUsuario.run().then(() => infoPCLAuth.procesarLogin(AutenticarUsuario.data, "MENU"))
+     * AutenticarUsuario.run()
+     *   .then(() => infoPCLAuth.procesarLogin(AutenticarUsuario.data, "MENU"))
      */
 	procesarLogin(data, paginaDestino = "MENU") {
 		const r0 = data && data[0];
@@ -371,10 +589,7 @@ export default {
 			return Promise.resolve(false);
 		}
 
-		return this._setSesionDesdeResponse(r0).then(() => this.irAPagina(paginaDestino));
-	},
-
-	reiniciarIngreso() {
-		return this._limpiarSesion();
+		return this._setSesionDesdeResponse(r0)
+			.then(() => this.irAPagina(paginaDestino));
 	}
 };

@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "69d3a680df758d40c23d95b3_415b133f-f0a7-4cc6-aef1-3c797f30328c",
-  "id": "Menu_infoPCLAuth.tieneRol",
+  "gitSyncId": "69d3a680df758d40c23d95b3_cf2e77d0-b8a6-4c68-94dc-5b116f3747eb",
+  "id": "Menu_infoPCLAuth.irAPagina",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -8,7 +8,11 @@
       "encodeParamsToggle": true,
       "jsArguments": [
         {
-          "name": "rol"
+          "name": "nombrePagina"
+        },
+        {
+          "name": "mensaje",
+          "value": "{{null}}"
         }
       ],
       "paginationType": "NONE",
@@ -26,8 +30,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "infoPCLAuth.tieneRol",
-    "name": "tieneRol",
+    "fullyQualifiedName": "infoPCLAuth.irAPagina",
+    "name": "irAPagina",
     "pageId": "Menu",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

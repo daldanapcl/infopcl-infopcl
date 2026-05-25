@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "69d3a680df758d40c23d95b3_415b133f-f0a7-4cc6-aef1-3c797f30328c",
-  "id": "Menu_infoPCLAuth.tieneRol",
+  "gitSyncId": "69d3a680df758d40c23d95b3_cddd79d5-897d-463a-9a41-dc6204b1dc81",
+  "id": "Menu_infoPCLAuth._limpiarMuchos",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -8,7 +8,7 @@
       "encodeParamsToggle": true,
       "jsArguments": [
         {
-          "name": "rol"
+          "name": "claves"
         }
       ],
       "paginationType": "NONE",
@@ -26,8 +26,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "infoPCLAuth.tieneRol",
-    "name": "tieneRol",
+    "fullyQualifiedName": "infoPCLAuth._limpiarMuchos",
+    "name": "_limpiarMuchos",
     "pageId": "Menu",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

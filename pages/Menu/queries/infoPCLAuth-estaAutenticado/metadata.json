@@ -1,16 +1,12 @@
 {
-  "gitSyncId": "69d3a680df758d40c23d95b3_415b133f-f0a7-4cc6-aef1-3c797f30328c",
-  "id": "Menu_infoPCLAuth.tieneRol",
+  "gitSyncId": "69d3a680df758d40c23d95b3_0458a808-2fbe-4765-9c23-ca763b93523a",
+  "id": "Menu_infoPCLAuth.estaAutenticado",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [
-        {
-          "name": "rol"
-        }
-      ],
+      "jsArguments": [],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -26,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "infoPCLAuth.tieneRol",
-    "name": "tieneRol",
+    "fullyQualifiedName": "infoPCLAuth.estaAutenticado",
+    "name": "estaAutenticado",
     "pageId": "Menu",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

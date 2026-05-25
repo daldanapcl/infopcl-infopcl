@@ -1,5 +1,5 @@
 {
-  "gitSyncId": "69d3a680df758d40c23d95b3_36c6d33b-94ce-4f52-8bce-4ff7ec235a08",
+  "gitSyncId": "69d3a680df758d40c23d95b3_b875cb2c-ced1-458e-a9de-844f84b2861a",
   "id": "Menu_infoPCLAuth",
   "unpublishedCollection": {
     "name": "infoPCLAuth",
@@ -7,6 +7,10 @@
     "pluginId": "js-plugin",
     "pluginType": "JS",
     "variables": [
+      {
+        "name": "VARS",
+        "value": "{\n  SESION_ID: \"sesion_id\",\n  USUARIO_ID: \"usuario_id\",\n  NOMBRE_USUARIO: \"nombre_usuario\",\n  CORREO_ELECTRONICO: \"correo_electronico\",\n  ROLES: \"roles\",\n  USUARIO_AUTENTICADO: \"usuario_autenticado\",\n  PAGINA_AUTORIZADA: \"pagina_autorizada\"\n}"
+      },
       {
         "name": "urlIngreso",
         "value": "\"http://\" + appsmith.URL.hostname + \"/app/infopcl/ingreso\""
