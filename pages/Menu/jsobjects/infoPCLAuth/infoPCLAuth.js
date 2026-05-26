@@ -61,14 +61,17 @@ export default {
 		return {
 			INGRESO: {
 				url: this.urlIngreso,
+				nombrePagina: "Ingreso",
 				roles: null
 			},
 			MENU: {
 				url: this.urlMenu,
+				nombrePagina: "Menu",
 				roles: null
 			},
 			NO_AUTORIZADO: {
 				url: this.urlNoAutorizado,
+				nombrePagina: "No Autorizado",
 				roles: null
 			},
 			ADMIN_PRODUCTOS: {
@@ -482,8 +485,10 @@ export default {
 			return Promise.resolve(false);
 		}
 
+		var destino = pagina.nombrePagina || pagina.url;
+		
 		if (mensaje) {
-			return this._navegar(pagina.url, { mensaje });
+			return this._navegar(destino, { mensaje });
 		}
 
 		return this._navegarSilencioso(pagina.url);
