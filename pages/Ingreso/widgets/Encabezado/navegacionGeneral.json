@@ -23,7 +23,7 @@
   "dynamicPropertyPathList": [],
   "dynamicTriggerPathList": [
     {
-      "key": "groupButtons.groupButton1.onClick"
+      "key": "groupButtons.groupButton2.onClick"
     }
   ],
   "groupButtons": {
@@ -38,7 +38,6 @@
       "isVisible": false,
       "label": "",
       "menuItems": {},
-      "onClick": "{{navigateTo(\"\", {}, 'SAME_WINDOW')}}",
       "placement": "CENTER",
       "widgetId": ""
     },
@@ -51,9 +50,10 @@
       "id": "groupButton2",
       "index": 1,
       "isDisabled": false,
-      "isVisible": false,
+      "isVisible": true,
       "label": "",
       "menuItems": {},
+      "onClick": "{{infoPCLAuth.cerrarSesion();}}",
       "placement": "CENTER",
       "widgetId": ""
     }
@@ -62,7 +62,7 @@
   "isLoading": false,
   "isVisible": true,
   "key": "v6q6qt5dlm",
-  "leftColumn": 51,
+  "leftColumn": 58,
   "minWidth": 450,
   "mobileBottomRow": 61,
   "mobileLeftColumn": 12,
@@ -71,7 +71,7 @@
   "needsErrorInfo": false,
   "orientation": "horizontal",
   "parentColumnSpace": 6.84375,
-  "parentId": "2f366gul0e",
+  "parentId": "j99xr3c5x1",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
@@ -79,6 +79,6 @@
   "topRow": 0,
   "type": "BUTTON_GROUP_WIDGET",
   "version": 1,
-  "widgetId": "tjdyiiqkbj",
+  "widgetId": "99hym5aimj",
   "widgetName": "navegacionGeneral"
 }

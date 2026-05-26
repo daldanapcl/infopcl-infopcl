@@ -38,7 +38,7 @@
       "mobileTopRow": 0,
       "needsErrorInfo": false,
       "parentColumnSpace": 1,
-      "parentId": "2hog1h9t13",
+      "parentId": "5aw91sg61h",
       "parentRowSpace": 1,
       "renderMode": "CANVAS",
       "responsiveBehavior": "fill",
@@ -46,7 +46,7 @@
       "topRow": 0,
       "type": "CANVAS_WIDGET",
       "version": 1,
-      "widgetId": "2f366gul0e",
+      "widgetId": "j99xr3c5x1",
       "widgetName": "Canvas1"
     }
   ],
@@ -72,6 +72,8 @@
   "mobileRightColumn": 24,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
+  "originalBottomRow": 44,
+  "originalTopRow": 38,
   "parentColumnSpace": 17.015625,
   "parentId": "0",
   "parentRowSpace": 10,
@@ -82,6 +84,6 @@
   "topRow": 0,
   "type": "CONTAINER_WIDGET",
   "version": 1,
-  "widgetId": "2hog1h9t13",
+  "widgetId": "5aw91sg61h",
   "widgetName": "Encabezado"
 }

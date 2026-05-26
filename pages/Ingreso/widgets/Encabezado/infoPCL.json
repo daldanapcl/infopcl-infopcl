@@ -35,7 +35,7 @@
   "originalTopRow": 0,
   "overflow": "NONE",
   "parentColumnSpace": 16.703125,
-  "parentId": "2f366gul0e",
+  "parentId": "j99xr3c5x1",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
@@ -48,6 +48,6 @@
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "azhgzlba40",
+  "widgetId": "1vf6na7jbt",
   "widgetName": "infoPCL"
 }
