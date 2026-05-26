@@ -1,6 +1,6 @@
 export default {
 	verificarAutenticacion () {
-		AutenticarUsuario.run()
+		return AutenticarUsuario.run()
 			.then(() => infoPCLAuth.procesarLogin(AutenticarUsuario.data, "MENU"));
 		
 		/*if (AutenticarUsuario.data[0].resultado === 'OK') {
