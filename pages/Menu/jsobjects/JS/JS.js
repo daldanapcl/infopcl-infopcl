@@ -1,5 +1,5 @@
 export default {
 	onLoad() {
-		infoPCLAuth.protegerAcceso();
+		infoPCLAuth.protegerPagina("MENU");
 	}
 }
