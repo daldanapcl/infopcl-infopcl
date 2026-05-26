@@ -14,6 +14,11 @@
       "key": "borderRadius"
     }
   ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
@@ -31,7 +36,7 @@
   "mobileRightColumn": 40,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onClick": "{{AutenticarUsuario.run().then(() => {\n  JS.verificarAutenticacion();\n});}}",
+  "onClick": "{{JS.verificarAutenticacion()}}",
   "originalBottomRow": 22,
   "originalTopRow": 18,
   "parentColumnSpace": 22.21875,
